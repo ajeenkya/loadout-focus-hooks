@@ -1,0 +1,20 @@
+---
+date: YYYY-MM-DD
+---
+
+# Today's locked priorities
+
+Copy to today.md and set the date each morning. Keep it to three. The hook prints
+these on every prompt, so the model can tell when you have wandered off them.
+
+1. **One sentence: the outcome you want by tonight.**
+   verify: grep:keyword path/to/check
+
+2. **Second outcome.**
+   verify: file_exists:path/to/artifact
+
+3. **Third outcome.**
+   verify: grep:other-keyword path/to/other
+
+The verify: line is printed as written. It is a reminder to check for evidence
+that the work is already done before you redo it; the model runs the check.

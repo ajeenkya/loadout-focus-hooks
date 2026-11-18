@@ -1,0 +1,40 @@
+# focus.yaml, single source of truth for monthly attention.
+#
+# Read by:
+#   - focus-guard.sh    (warns or blocks a project switch mid-session)
+#
+# To activate: copy this file to focus.yaml (drop the .example suffix) and
+# edit the values below. The hook silently no-ops while focus.yaml is absent.
+#
+#   cp focus.yaml.example focus.yaml
+#
+# Rules of thumb:
+#   - One primary per month. If you can't pick one, your portfolio is too wide.
+#   - Parked projects MUST have a resurrect_trigger (a date or a condition).
+#   - hook_mode: start with "warn" for a week, upgrade to "block" once you
+#     trust the signal.
+#
+# Schema version: 1
+
+period:
+  month: "YYYY-MM"                            # e.g. "2026-05"
+  primary: my-primary-project                 # the slug of the folder under PROJECTS_ROOT
+  primary_intent: "What I'm trying to land this month."
+  secondary: my-secondary-project             # optional, set to null if none
+  secondary_intent: "What 'good enough' looks like for the secondary."
+  declared_at: "YYYY-MM-DD"                   # date you committed to this focus
+  hook_mode: warn                             # warn | block
+
+# Projects intentionally paused with explicit resurrect conditions.
+# These DON'T trigger the guard (they're known-parked, not drifting).
+parked:
+  - slug: my-parked-project
+    path: ~/projects/my-parked-project
+    paused_at: "YYYY-MM-DD"
+    resurrect_trigger: "When X ships" # or a date
+
+# Projects allowed sporadic attention without triggering the guard.
+# Use sparingly, this is the "I touch it weekly but it's not primary" bucket.
+allowed_concurrent:
+  - my-meta-project
+  - my-always-on-project
