@@ -26,11 +26,10 @@ if [ -f "$TODAY_FILE" ]; then
     echo "today.md locked priorities:"
     # Each numbered priority, followed by its verify: hint when the next line has one.
     awk '
-      /^[0-9]+\./ { print "  " $0; getline nxt;
-                    if (nxt ~ /^[[:space:]]*verify:/) {
-                      sub(/^[[:space:]]+/, "", nxt); print "     [" nxt "]"
-                    }
-                  }
+      # No getline: it consumed the next line, so adjacent priorities were skipped (fixed 2026-11-18).
+      /^[0-9]+\./                          { print "  " $0; prev_pri = 1; next }
+      prev_pri && /^[[:space:]]*verify:/    { line = $0; sub(/^[[:space:]]+/, "", line); print "     [" line "]" }
+                                            { prev_pri = 0 }
     ' "$TODAY_FILE"
     echo "Verify rule: before working on a priority, run its verify: query first. If it finds matches, the priority may already be done; say so before starting."
   elif [ -z "$today_date" ]; then
